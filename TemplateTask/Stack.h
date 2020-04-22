@@ -1,3 +1,4 @@
+#define _SCL_SECURE_NO_WARNINGS 1
 #pragma once
 #include <iostream>
 #include <iomanip>
@@ -9,12 +10,16 @@ class Stack
 private:
 	T *stackPtr; // указатель на стек
 	int size; // размер стека
-	T top; // вершина стека
+	const size_t max_size = 10;
+	T top = 0; // вершина стека
 public:
-	Stack(int = 10);// по умолчанию размер стека равен 10 элементам
+	Stack(int sz = 10);// по умолчанию размер стека равен 10 элементам
 	~Stack(); // деструктор
 	bool push(const T); // поместить элемент в стек
-	bool pop(); // удалить из стека элемент
+	T pop(); // удалить из стека элемент
+	bool empty() const;
+	void merge(Stack &src);
+	void reserve(int new_size);
 	void printStack();
 };
 
@@ -24,7 +29,6 @@ Stack<T>::Stack(int s)
 {
 	size = s > 0 ? s : 10;   // инициализировать размер стека
 	stackPtr = new T[size]; // выделить память под стек
-	top = -1; // значение -1 говорит о том, что стек пуст
 }
 
 // деструктор
@@ -39,33 +43,60 @@ Stack<T>::~Stack()
 template <typename T>
 bool Stack<T>::push(const T value)
 {
-	if (top == size - 1)
-		return false; // стек полон
-
-	top++;
+	if (top == size) // стек полон
+	{
+		cout << "Stack overflow" << endl;
+		return false; 
+	}
 	stackPtr[top] = value; // помещаем элемент в стек
-
+	top++;
 	return true; // успешное выполнение операции
 }
 
 // элемент функция класса  Stack для удаления элемента из стек
 // возвращаемое значение: true - операция успешно завершена, false - стек пуст
 template <typename T>
-bool Stack<T>::pop()
+T Stack<T>::pop()
 {
-	if (top == -1)
-		return false; // стек пуст
-
-	stackPtr[top] = 0; // удаляем элемент из стека
-	top--;
-
-	return true; // успешное выполнение операции
+	if (top == 0) //cout << "Stack is empty" << endl;
+		throw std::out_of_range("Stack is empty");
+	return stackPtr[--top]; // удаляем элемент из стека
 }
 
 // вывод стека на экран
 template <typename T>
-void Stack<T>::printStack()
+void Stack<T>::printStack() //вывод стека в столбец
 {
-	for (int ix = size - 1; ix >= 0; ix--)
+	for (int ix = top - 1; ix >= 0; ix--)
 		cout << "|" << setw(4) << stackPtr[ix] << endl;
 }
+
+template <typename T>
+bool Stack<T>::empty() const
+{
+	return top == 0;
+}
+
+template <typename T> 
+void Stack<T>::reserve(int new_size) //функция для увеличения размера стека
+{
+	if (new_size <= size)
+		return;
+
+	T *data = new T[new_size];
+	std::move(stackPtr, stackPtr + top, data);
+	delete[] stackPtr;
+	size = new_size;
+	stackPtr = data;
+}
+
+template <typename T>
+void Stack<T>::merge(Stack &src)
+{
+	reserve(top + src.top);
+	for (int i = 0; i < src.top; ++i) //чтобы второй стек не переворачивался при соединении
+		push(src.stackPtr[i]);
+
+	src.top = 0;
+}
+
