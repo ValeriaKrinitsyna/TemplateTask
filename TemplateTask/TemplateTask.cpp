@@ -1,7 +1,7 @@
 // TemplateTask.cpp: определяет точку входа для консольного приложения.
 //
 #include "stdafx.h"
-#define _SCL_SECURE_NO_WARNINGS 1
+//#define _SCL_SECURE_NO_WARNINGS 1
 
 #include <iostream>
 #include "Stack.h"
