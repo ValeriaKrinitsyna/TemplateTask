@@ -57,9 +57,9 @@ template <class T>
 void Tree<T>::traversal(vector<T>& top, Node* root)
 {
 	if (root) {
-		traversal(top, root->left);
+		traversal(top, root->left); // go around left subtree
 		top.push_back(root->value);
-		traversal(top, root->right);
+		traversal(top, root->right); // go around right subtree
 	}
 }
 
@@ -96,8 +96,9 @@ void Tree<T>::add(T value, Node*& node)
 	else throw "This value is already in the tree!";
 }
 
-template<class T>
-string Tree<T>::TreeToString(Node* node) {
+template<class T>  
+string Tree<T>::TreeToString(Node* node) // output of the tree
+{
 	string leftStr = (node->left == nullptr) ? "{}" : TreeToString(node->left);
 	string rightStr = (node->right == nullptr) ? "{}" : TreeToString(node->right);
 	string result = "{" + to_string(node->value) + ", " + leftStr + ", " + rightStr + "}";
@@ -111,25 +112,28 @@ void Tree<T>::remove(T value)
 }
 
 template<class T>
-void Tree<T>::remove(T value, Node*& root) {
-	if (root == nullptr) {
+void Tree<T>::remove(T value, Node*& root) 
+{
+	if (root == nullptr) 
+	{
 		throw "Not found";
 	}
 	if (value > root->value) remove(value, root->right);
 	else if (value < root->value) remove(value, root->left);
-	else {
+	else 
+	{
 		Node* temp = root;
 		if (temp->right == nullptr && temp->left == nullptr)
 		{
-			root = nullptr;
+			root = nullptr; // if no children, no root
 		}
 		else if (temp->right == nullptr && temp->left != nullptr)
 		{
-			root = temp->left;
+			root = temp->left; // no right child, left child to the root
 		}
 		else if (temp->left == nullptr && temp->right != nullptr)
 		{
-			root = temp->right;
+			root = temp->right; // no left child, right child to the root
 		}
 		else
 		{
