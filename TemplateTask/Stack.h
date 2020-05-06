@@ -1,4 +1,4 @@
-//#define _SCL_SECURE_NO_WARNINGS 1
+#define _SCL_SECURE_NO_WARNINGS 1
 #pragma once
 #include <iostream>
 #include <iomanip>
