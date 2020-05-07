@@ -92,7 +92,7 @@ void Tree<T>::add(T value, Node*& node) // add new node to it's place
 		node = new Node(value);
 	}
 	else if (value < node->value) this->add(value, node->left); //if value is less than node, add new to the left subtree
-	else if (value > node->value) this->add(value, node->right); //if value is bogger than node, add new to the right subtree
+	else if (value > node->value) this->add(value, node->right); //if value is bigger than node, add new to the right subtree
 	else throw "This value is already in the tree!";
 }
 
